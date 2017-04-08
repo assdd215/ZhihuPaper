@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="@color/colorWhite"
+    android:layout_height="@dimen/space_120"
+    android:id="@+id/header_layout">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/space_64"
+        android:layout_height="@dimen/space_64"
+        android:id="@+id/person_avactor"
+        android:layout_marginStart="@dimen/space_25"
+        android:layout_marginLeft="@dimen/space_25"
+        android:layout_centerVertical="true"
+        android:src="@drawable/comment_avatar"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/person_avactor"
+        android:layout_toEndOf="@+id/person_avactor"
+        android:layout_marginLeft="@dimen/space_25"
+        android:layout_marginStart="@dimen/space_25"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/header_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请登录"
+            android:textSize="@dimen/textSize_18"
+            android:textColor="@color/colorBlack"/>
+        <TextView
+            android:id="@+id/header_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccountGray"
+            android:layout_marginTop="@dimen/space_10"
+            android:text="账号:"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/space_40"
+        android:layout_height="@dimen/space_40"
+        android:layout_centerVertical="true"
+        android:alpha="0.5"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_chevron_right_black_48dp"/>
+
+</RelativeLayout>

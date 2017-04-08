@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:overScrollMode="never"
+    android:layout_margin="@dimen/space_6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/item_topic_title"/>
+
+        <TextView
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_ariticle_title"
+            android:textSize="@dimen/textSize_18"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/space_5"
+            android:layout_marginStart="@dimen/space_5"
+            android:layout_marginRight="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:text="有哪些明明可以知道谁很可能是凶手但就是没有证据的案例？"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:id="@+id/item_article_summary"
+            android:textSize="@dimen/textSize_12"
+            android:textColor="@color/colorDarkGray"
+            android:text="@string/summary"
+            android:layout_margin="@dimen/space_5"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

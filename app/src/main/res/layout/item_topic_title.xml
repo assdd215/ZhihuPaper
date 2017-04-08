@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/space_5">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/space_15"
+        android:layout_height="@dimen/space_15"
+        android:id="@+id/topic_avactor"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/banner01"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/topic_from_textview"
+        android:text="来自话题：人性"
+        android:textSize="@dimen/textSize_10"
+        android:textColor="@color/colorDarkGray"
+        android:layout_toRightOf="@+id/topic_avactor"
+        android:layout_toEndOf="@+id/topic_avactor"
+        android:layout_marginLeft="@dimen/space_5"
+        android:layout_marginStart="@dimen/space_5"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:layout_width="@dimen/space_15"
+        android:layout_height="@dimen/space_15"
+        android:id="@+id/topic_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_more_horiz_black_36dp"
+        android:layout_marginRight="@dimen/space_5"
+        android:layout_marginEnd="@dimen/space_5"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

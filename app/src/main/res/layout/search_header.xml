@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/colorLightBlue">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <ImageView
+        android:layout_width="@dimen/space_30"
+        android:layout_height="@dimen/space_30"
+        android:src="@drawable/ic_chevron_left_white_36dp"
+        android:id="@+id/search_backbtn"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/space_6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_textView"
+        android:text="搜索"
+        android:textSize="@dimen/textSize_16"
+        android:textColor="@color/colorWhite"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/space_10"/>
+
+    <LinearLayout
+        android:layout_width="@dimen/space_260"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_frame"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:layout_width="@dimen/space_20"
+            android:layout_height="@dimen/space_20"
+            android:layout_marginLeft="@dimen/space_5"
+            android:src="@drawable/ic_search_black_36dp"
+            android:alpha="0.5"
+            android:layout_gravity="center_vertical"/>
+
+        <com.example.aria.baike.ui.widget.ClearEditText
+            android:layout_width="@dimen/space_220"
+            android:layout_height="@dimen/space_35"
+            android:id="@+id/search_edittext"
+            android:layout_gravity="center_vertical"
+            android:textColorHint="@color/colorDarkGray"
+            android:textSize="@dimen/textSize_16"
+            android:background="@color/colorWhite"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:hint="搜索"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
