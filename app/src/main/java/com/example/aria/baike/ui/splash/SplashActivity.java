@@ -45,16 +45,6 @@ public class SplashActivity extends BaseActivity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-////                startActivity(new Intent(SplashActivity.this,Main));
-//                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-//                finish();
-//            }
-//        },1000);
     }
 
     @Override
