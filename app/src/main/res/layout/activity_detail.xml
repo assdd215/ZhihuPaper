@@ -24,9 +24,9 @@
             app:layout_collapseParallaxMultiplier="0.7">
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/space_240"
                 android:id="@+id/article_detail_pic"
-                android:src="@drawable/splash"
+                android:src="@drawable/detail_pic"
                 android:scaleType="centerCrop" />
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +36,8 @@
                 android:text="一叶不光能知秋，也能看出生命演化的过程"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/textSize_24"
-                android:layout_marginTop="@dimen/space_160"/>
+                android:layout_marginTop="@dimen/space_180"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -50,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="测试"
+                    android:text="文章"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/space_20"/>
             </android.support.v7.widget.Toolbar>

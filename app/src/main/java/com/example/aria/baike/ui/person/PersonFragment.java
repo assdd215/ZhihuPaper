@@ -20,6 +20,7 @@ import com.example.aria.baike.common.BaseFragment;
 import com.example.aria.baike.global.Constants;
 import com.example.aria.baike.ui.person.adapter.DividerGridItemDecoration;
 import com.example.aria.baike.ui.person.adapter.FeaturesGridAdapter;
+import com.example.aria.baike.ui.person.adapter.PersonMenuAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 public class PersonFragment extends BaseFragment{
 
     private FeaturesGridAdapter gridAdapter;
+    private PersonMenuAdapter personMenuAdapter;
     private OnItemClickListener onItemClickListener;
 
     @BindView(R.id.Feature_Container)
@@ -60,33 +62,31 @@ public class PersonFragment extends BaseFragment{
     @Override
     public void initData() {
         List<String> titles = new ArrayList<String>();
-        titles.add("我的百科");
-        titles.add("我的咨询");
-        titles.add("我的笔记");
-        titles.add("浏览历史");
-        titles.add("我的百科");
-        titles.add("我的咨询");
-        titles.add("我的笔记");
-        titles.add("浏览历史");
+        titles.add("我的关注");
+        titles.add("我的收藏");
+        titles.add("我的草稿");
+        titles.add("最近浏览");
+        titles.add("我的书架");
+        titles.add("我的Live");
 
         List<Integer> images = new ArrayList<Integer>();
-        images.add(R.drawable.ic_library_books_black_36dp);
-        images.add(R.drawable.ic_question_answer_black_36dp);
-        images.add(R.drawable.ic_note_black_36dp);
-        images.add(R.drawable.ic_history_black_36dp);
-        images.add(R.drawable.ic_library_books_black_36dp);
-        images.add(R.drawable.ic_question_answer_black_36dp);
-        images.add(R.drawable.ic_note_black_36dp);
-        images.add(R.drawable.ic_history_black_36dp);
+        images.add(R.drawable.tubiao01);
+        images.add(R.drawable.tubiao02);
+        images.add(R.drawable.tubiao03);
+        images.add(R.drawable.tubiao04);
+        images.add(R.drawable.tubiao06);
+        images.add(R.drawable.tubiao07);
 
+        personMenuAdapter = new PersonMenuAdapter(context,titles,images);
         gridAdapter = new FeaturesGridAdapter(context,titles,images);
     }
 
     @Override
     public void initView() {
-        Container.setLayoutManager(new GridLayoutManager(context,3));
-        Container.addItemDecoration(new DividerGridItemDecoration(context));
-        Container.setAdapter(gridAdapter);
+//        Container.setLayoutManager(new GridLayoutManager(context,3));
+//        Container.addItemDecoration(new DividerGridItemDecoration(context));
+        Container.setLayoutManager(new LinearLayoutManager(context));
+        Container.setAdapter(personMenuAdapter);
     }
 
     @Override

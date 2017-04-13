@@ -1,17 +1,12 @@
 package com.example.aria.baike.ui.home.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
 import com.example.aria.baike.R;
 import com.example.aria.baike.global.Constants;
@@ -24,21 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Aria on 2017/2/18.
+ * Created by Aria on 2017/4/13.
  */
 
-
-public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder>{
+public class ArticleListAdapter extends RecyclerView.Adapter{
 
     private Context context;
     private final int BANNER_VIEWTYPE = 0x0123;
     private final int ARTITLE_VIEWTYPE = 0x0124;
-    private List<Article> articleList;
-    List list;
-    OnItemClickListener onItemClickListener;
+    private final int FOOT_VIEWTYPE = 0x0125;
 
+    private List<Article> articleList;
     private List<Integer> BannerImages;
     private List<String> BannerTitles;
+
+    private OnItemClickListener onItemClickListener;
 
     public ArticleListAdapter(Context context){
         this.context = context;
@@ -47,77 +42,87 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder>{
         BannerTitles = new ArrayList<String>();
         BannerImages.add(R.drawable.banner01);
         BannerImages.add(R.drawable.banner02);
-        BannerTitles.add("title01");
-        BannerTitles.add("震惊！UC震惊部！");
-        list = new ArrayList();
-        for (int i=0;i<7;i++){
-            list.add(i);
-        }
+        BannerImages.add(R.drawable.banner03);
+        BannerImages.add(R.drawable.banner04);
+        BannerImages.add(R.drawable.banner05);
+        BannerTitles.add("小事 · 并非有意害人，只是本性如此");
+        BannerTitles.add("原作者还没画完就去世了，那他的作品怎么办？");
+        BannerTitles.add("行走在都柏林，旅途就像一场电影");
+        BannerTitles.add("春天尝起来是什么味道？");
+        BannerTitles.add("科幻电影里，这些设计都已经变成了常客");
     }
 
+
     @Override
-    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ArticleViewHolder holder;
-        switch (viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder holder = null;
+
+        switch (viewType){
             case BANNER_VIEWTYPE:
-                holder = new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.banner_header_layout, parent, false), true);
+                holder = new BannerViewHolder(LayoutInflater.from(context).inflate(R.layout.banner_header_layout,parent,false));
+
                 break;
             case ARTITLE_VIEWTYPE:
-                holder = new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_article_content, parent, false), false);
+                holder = new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_article_content,parent,false));
+                break;
+            case FOOT_VIEWTYPE:
+                holder = new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.item_article_foot,parent,false));
                 break;
             default:
-                holder = null;
                 break;
         }
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ArticleViewHolder holder,int position) {
-        Log.d("MainActivity",position+"");
-        switch (getItemViewType(position)){
-            case BANNER_VIEWTYPE:
-                Banner banner = holder.banner;
-                banner.setImageLoader(new GlideImageLoader());
-                banner.setImages(BannerImages)
-                        .setBannerTitles(BannerTitles)
-                        .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
-                        .start();
-                break;
-            case ARTITLE_VIEWTYPE:
-                final int pos = position;
-
-                holder.title.setText(articleList.get(position-1).getTitle());
-                holder.summary.setText(articleList.get(position-1).getSummary());
-                holder.from.setText("来自类别："+articleList.get(position-1).getClassify());
-
-                holder.summary.setId(pos);
-                holder.summary.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onItemClickListener.onArticleItemClickListener(v);
-                    }
-                });
-
-                holder.topicBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PopupMenu popupMenu = new PopupMenu(context,v);
-                        popupMenu.getMenuInflater().inflate(R.menu.article_popedmenu,popupMenu.getMenu());
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()){
-                                    case R.id.item_delete:
-                                        removeItem(pos);
-                                }
-                                return false;
-                            }
-                        });
-                        popupMenu.show();
-                    }
-                });
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof FootViewHolder){
+            return;
         }
+        if (holder instanceof ArticleViewHolder){
+            final int pos = position;
+            ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+            articleViewHolder.title.setText(articleList.get(position-1).getTitle());
+            articleViewHolder.summary.setText(articleList.get(position-1).getSummary());
+            articleViewHolder.from.setText("来自类别："+articleList.get(position-1).getClassify());
+
+            articleViewHolder.summary.setId(pos);
+            articleViewHolder.summary.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onArticleItemClickListener(v);
+                }
+            });
+
+            articleViewHolder.topicBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(context,v);
+                    popupMenu.getMenuInflater().inflate(R.menu.article_popedmenu,popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.item_delete:
+                                    removeItem(pos);
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+        }
+        if (holder instanceof BannerViewHolder){
+            BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
+            Banner banner = bannerViewHolder.banner;
+            banner.setImageLoader(new GlideImageLoader());
+            banner.setImages(BannerImages)
+                    .setBannerTitles(BannerTitles)
+                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+                    .start();
+        }
+
     }
 
     @Override
@@ -125,32 +130,28 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleViewHolder>{
         return articleList.size()+1;
     }
 
-    public void removeItem(int position){
-        Toast.makeText(context,"position:"+position,Toast.LENGTH_SHORT).show();
-        articleList.remove(position-1);
-        notifyItemRemoved(position);
-//        notifyItemRangeChanged(position,list.size());
-    }
-
     @Override
     public int getItemViewType(int position) {
-        if (position == 0){
-            return BANNER_VIEWTYPE;
-        }else return ARTITLE_VIEWTYPE;
+        if (position == 0)return BANNER_VIEWTYPE;
+        return ARTITLE_VIEWTYPE;
     }
 
-    public interface OnItemClickListener{
-        void onArticleItemClickListener(View v);
-        void onBannerClickListener();
+    public void removeItem(int position){
+        articleList.remove(position-1);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position,articleList.size() - position);
+//        notifyItemRangeChanged(position,list.size());
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void updateArticleList(){
-        articleList = Constants.getInstance().getArticleList();
+    public interface OnItemClickListener{
+        void onArticleItemClickListener(View view);
+    }
+
+    public List<Article> getArticleList() {
+        return articleList;
     }
 }
-
-

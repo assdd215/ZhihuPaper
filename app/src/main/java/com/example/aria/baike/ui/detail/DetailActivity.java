@@ -72,6 +72,7 @@ public class DetailActivity extends BaseActivity{
 
     public void initToolBar(){
         toolbar.inflateMenu(R.menu.article_toolbar_menu);
+        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_actionbar_menu_overflow));
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_36dp);
 //        setSupportActionBar(toolbar);
     }

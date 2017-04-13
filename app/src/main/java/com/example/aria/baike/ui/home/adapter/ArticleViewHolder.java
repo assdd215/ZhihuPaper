@@ -37,4 +37,13 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
         }
 
     }
+
+    public ArticleViewHolder(View itemView){
+        super(itemView);
+        title = (TextView) itemView.findViewById(R.id.item_ariticle_title);
+        summary = (TextView) itemView.findViewById(R.id.item_article_summary);
+        topicBtn = (ImageView) itemView.findViewById(R.id.topic_image);
+        topicAvactor = (CircleImageView) itemView.findViewById(R.id.topic_avactor);
+        from = (TextView) itemView.findViewById(R.id.topic_from_textview);
+    }
 }

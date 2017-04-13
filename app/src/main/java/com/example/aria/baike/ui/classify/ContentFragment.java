@@ -36,7 +36,7 @@ public class ContentFragment extends BaseFragment{
 
     @Override
     public void initView() {
-        textView.setText(tab);
+        textView.setText("该界面尚未完善");
     }
 
     public static ContentFragment newInstance(String tab){

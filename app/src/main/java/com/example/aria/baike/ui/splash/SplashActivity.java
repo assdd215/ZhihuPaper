@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.aria.baike.R;
 import com.example.aria.baike.common.BaseActivity;
@@ -54,19 +55,36 @@ public class SplashActivity extends BaseActivity{
     }
 
     private void loadData(){
-        Call call = Networks.getInstance().getAllArticles();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("lastIndex",Networks.getInstance().lastIndex);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Call call = Networks.getInstance().doPost(Networks.basepath+"/article/getArticles",object);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(),"获取数据失败！",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                Log.d("MainActivity","response code:"+response.code());
+                if (response.code()!= 200){
+                    finish();
+                    Log.d("MainActivity","response code:"+response.code());
+                    return;
+                }
                 str = response.body().string();
                 Article article;
                 JSONObject jsonObject;
-                Log.d("MainActivity",str);
                 try {
                     JSONArray jsonArray = new JSONArray(str);
                     for (int i=0;i<jsonArray.length();i++){
@@ -78,6 +96,7 @@ public class SplashActivity extends BaseActivity{
                         article.setSummary(jsonObject.getString("summary"));
                         article.setUrl(jsonObject.getString("url"));
                         articleList.add(article);
+                        Networks.getInstance().lastIndex++;
                     }
                     Constants.getInstance().setArticleList(articleList);
                 } catch (JSONException e) {

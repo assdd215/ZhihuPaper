@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/colorCommonBgGray"
     android:layout_height="match_parent"
     android:layout_gravity="start|top">
+
+
+    <!--抽屉头布局-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_8"
+        android:background="@color/colorLightBlue"
+        tools:background="@color/colorLightBlue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_user_message"
+            android:layout_marginTop="@dimen/space_4"
+            android:layout_marginLeft="@dimen/space_16"
+            android:layout_marginBottom="@dimen/space_25"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_icon"
+                android:layout_width="@dimen/space_35"
+                android:layout_height="@dimen/space_35"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="@dimen/space_10"
+                android:src="@drawable/comment_avatar"/>
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_18"
+                tools:textColor="@android:color/white"
+                android:textColor="@color/colorWhite"
+                android:text="请登录"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/space_16"
+            android:gravity="center_vertical" >
+
+
+            <Button
+                android:id="@+id/action_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/favorites"
+                android:drawablePadding="@dimen/space_negative_26"
+                android:text="@string/action_favorites"
+                android:textColor="@color/colorWhite"
+                tools:textColor="@color/colorWhite"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/action_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/download"
+                android:drawablePadding="@dimen/space_negative_26"
+                android:text="@string/action_download_caches"
+                android:textColor="@color/colorWhite"
+                tools:textColor="@color/colorWhite"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+        <!--标签-->
+        <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/drawerContainer"/>
+
 
 </LinearLayout>

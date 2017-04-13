@@ -1,7 +1,5 @@
 package com.example.aria.baike.global;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.example.aria.baike.model.User;
@@ -9,21 +7,13 @@ import com.example.aria.baike.model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by Aria on 2017/2/16.
@@ -34,14 +24,22 @@ public class Networks {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
-    private static final String basepath = "http://110.64.89.47:8080";
+    public static final String basepath = "http://192.168.31.209:8080";
+
+    private static final int READ_TIMEOUT = 1;
+    private static final int WRITE_TIMEOUT = 1;
+
+    public int lastIndex = 0;
 
     private OkHttpClient okHttpClient;
 
     private static Networks networks;
 
     private Networks() {
-        okHttpClient = new OkHttpClient();
+        okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT,TimeUnit.SECONDS)
+                .build();
     }
 
     public static Networks getInstance() {
@@ -51,9 +49,6 @@ public class Networks {
         return networks;
     }
 
-    public OkHttpClient getClient() {
-        return okHttpClient;
-    }
 
     public Call RegisterAccount(User user) {
         JSONObject object = new JSONObject();
@@ -111,44 +106,22 @@ public class Networks {
         return okHttpClient.newCall(request);
     }
 
-    public Call getAllArticles(){
-        Request request = new Request.Builder().url(basepath+"/article/getAll")
-                .method("GET",null)
-                .build();
+
+    public Call doPost(String url,JSONObject object){
+        Log.d("MainActivity","object:"+object.toString());
+        RequestBody body = RequestBody.create(JSON,object.toString());
+        Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(body)
+                                    .build();
         return okHttpClient.newCall(request);
     }
 
-    public void useHttpConnection(String url_str) {
-        try {
-            URL url = new URL(url_str);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            connection.setUseCaches(false);
-            connection.setReadTimeout(5000);
-            connection.setConnectTimeout(5000);
-            connection.setRequestProperty("Content-Type","application/json");
-
-            connection.connect();
-
-            JSONObject object = new JSONObject();
-            object.put("isweb",0);
-
-            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-            Log.d("MainActivity",object.toString());
-            writer.write(object.toString());
-            writer.flush();
-            writer.close();
-
-            connection.getInputStream();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public Call doPost(String url){
+        Request request = new Request.Builder().url(url).build();
+        return okHttpClient.newCall(request);
     }
+
 
 
 }

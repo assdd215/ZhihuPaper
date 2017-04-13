@@ -7,7 +7,7 @@
         android:id="@+id/banner"
         android:layout_width="match_parent"
         app:title_textsize="@dimen/textSize_20"
-        android:layout_height="@dimen/space_160"
+        android:layout_height="@dimen/space_200"
         app:indicator_height="@dimen/space_5"
         app:indicator_width="@dimen/space_5"
         app:indicator_margin="@dimen/space_5"

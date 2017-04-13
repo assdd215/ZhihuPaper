@@ -65,8 +65,9 @@ public class ClassifyFragment extends BaseFragment{
     }
 
     private void initContent(){
-        for (int i=0;i<8;i++){
-            tabIndicators.add("Tab"+i);
+        String []classifyIndicators = getResources().getStringArray(R.array.classify_indicator);
+        for (int i=0;i<classifyIndicators.length;i++){
+            tabIndicators.add(classifyIndicators[i]);
             tabFragments.add(ContentFragment.newInstance(tabIndicators.get(i)));
         }
         viewPager.setAdapter(new ContentPagerAdapter(getChildFragmentManager(),tabFragments,tabIndicators));

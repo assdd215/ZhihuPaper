@@ -18,24 +18,10 @@ import java.util.List;
 
 public class BannerViewHolder extends RecyclerView.ViewHolder{
 
-    Banner banner;
+    public Banner banner;
 
     public BannerViewHolder(View itemView) {
         super(itemView);
         banner = (Banner) itemView.findViewById(R.id.banner);
-    }
-
-    public void initBanner(){
-       List BannerImages = new ArrayList<Integer>();
-       List BannerTitles = new ArrayList<String>();
-        BannerImages.add(R.drawable.banner01);
-        BannerImages.add(R.drawable.banner02);
-        BannerTitles.add("title01");
-        BannerTitles.add("震惊！UC震惊部！");
-        if (banner == null){
-            Log.d("MainActivity","banner is null");
-        }
-        banner.setImageLoader(new GlideImageLoader());
-        banner.setImages(BannerImages).setBannerTitles(BannerTitles).setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
     }
 }
