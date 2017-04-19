@@ -22,21 +22,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
     TextView title;
     TextView summary;
     ImageView topicBtn;
-    Banner banner;
-
-    public ArticleViewHolder(View itemView,boolean isTop) {
-        super(itemView);
-        if (isTop){
-            banner = (Banner) itemView.findViewById(R.id.banner);
-        }else {
-            title = (TextView) itemView.findViewById(R.id.item_ariticle_title);
-            summary = (TextView) itemView.findViewById(R.id.item_article_summary);
-            topicBtn = (ImageView) itemView.findViewById(R.id.topic_image);
-            topicAvactor = (CircleImageView) itemView.findViewById(R.id.topic_avactor);
-            from = (TextView) itemView.findViewById(R.id.topic_from_textview);
-        }
-
-    }
 
     public ArticleViewHolder(View itemView){
         super(itemView);

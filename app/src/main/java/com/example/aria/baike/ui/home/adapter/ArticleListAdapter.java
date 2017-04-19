@@ -3,10 +3,12 @@ package com.example.aria.baike.ui.home.adapter;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.aria.baike.R;
 import com.example.aria.baike.global.Constants;
@@ -15,6 +17,7 @@ import com.example.aria.baike.model.Article;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +28,18 @@ import java.util.List;
 public class ArticleListAdapter extends RecyclerView.Adapter{
 
     private Context context;
-    private final int BANNER_VIEWTYPE = 0x0123;
-    private final int ARTITLE_VIEWTYPE = 0x0124;
-    private final int FOOT_VIEWTYPE = 0x0125;
+    private static final int BANNER_VIEWTYPE = 0x0123;
+    private static final int ARTITLE_VIEWTYPE = 0x0124;
+    private static final int FOOT_VIEWTYPE = 0x0125;
+
+    public static final String FOOT_LOADING = "正在载入中……";
+    public static final String FOOT_END = "没有更多数据";
+    public static final String FOOT_ERROR = "加载出错！";
 
     private List<Article> articleList;
     private List<Integer> BannerImages;
     private List<String> BannerTitles;
+    private TextView footText;
 
     private OnItemClickListener onItemClickListener;
 
@@ -67,6 +75,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
                 break;
             case FOOT_VIEWTYPE:
                 holder = new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.item_article_foot,parent,false));
+                footText = ((FootViewHolder)holder).foot;
                 break;
             default:
                 break;
@@ -82,9 +91,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
         if (holder instanceof ArticleViewHolder){
             final int pos = position;
             ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-            articleViewHolder.title.setText(articleList.get(position-1).getTitle());
-            articleViewHolder.summary.setText(articleList.get(position-1).getSummary());
-            articleViewHolder.from.setText("来自类别："+articleList.get(position-1).getClassify());
+            articleViewHolder.title.setText(articleList.get(position).getTitle());
+            articleViewHolder.summary.setText(articleList.get(position).getSummary());
+            articleViewHolder.from.setText("来自类别："+articleList.get(position).getClassify());
 
             articleViewHolder.summary.setId(pos);
             articleViewHolder.summary.setOnClickListener(new View.OnClickListener() {
@@ -127,20 +136,22 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return articleList.size()+1;
+        return articleList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)return BANNER_VIEWTYPE;
+        if (position == 0 && articleList.get(position).getType() == Article.BANNER)return BANNER_VIEWTYPE;
+        if(articleList.get(position).getType() == Article.FOOT){
+            return FOOT_VIEWTYPE;
+        }
         return ARTITLE_VIEWTYPE;
     }
 
     public void removeItem(int position){
-        articleList.remove(position-1);
+        articleList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position,articleList.size() - position);
-//        notifyItemRangeChanged(position,list.size());
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -151,7 +162,22 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
         void onArticleItemClickListener(View view);
     }
 
-    public List<Article> getArticleList() {
-        return articleList;
+    public void addFoot(){
+        if (articleList.get(articleList.size()-1).getType() == FOOT_VIEWTYPE){
+            footText.setText(FOOT_LOADING);
+            return;
+        }
+        Article article = new Article();
+        article.setType(Article.FOOT);
+        articleList.add(article);
+        notifyItemInserted(articleList.size()-1);
+    }
+
+    public void setFootText(String text){
+        footText.setText(text);
+    }
+
+    public void removeFoot(){
+        articleList.remove(articleList.size()-1);
     }
 }

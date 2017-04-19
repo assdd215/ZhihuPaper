@@ -51,6 +51,9 @@ public class SplashActivity extends BaseActivity{
     @Override
     public void initData() {
         articleList = new ArrayList<Article>();
+        Article article = new Article();
+        article.setType(Article.BANNER);
+        articleList.add(0,article);
         loadData();
     }
 
@@ -65,6 +68,7 @@ public class SplashActivity extends BaseActivity{
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -95,6 +99,7 @@ public class SplashActivity extends BaseActivity{
                         article.setClassify(jsonObject.getString("classify"));
                         article.setSummary(jsonObject.getString("summary"));
                         article.setUrl(jsonObject.getString("url"));
+                        article.setType(Article.ARTITLE);
                         articleList.add(article);
                         Networks.getInstance().lastIndex++;
                     }

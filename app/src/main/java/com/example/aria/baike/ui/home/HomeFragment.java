@@ -2,6 +2,7 @@ package com.example.aria.baike.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import com.example.aria.baike.global.Constants;
 import com.example.aria.baike.global.Networks;
 import com.example.aria.baike.model.Article;
 import com.example.aria.baike.ui.detail.DetailActivity;
+import com.example.aria.baike.ui.home.adapter.ArticleLinearLayoutManager;
 import com.example.aria.baike.ui.home.adapter.ArticleListAdapter;
 import com.example.aria.baike.ui.home.adapter.ArticleScrollListener;
 
@@ -30,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,26 +54,27 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             switch (msg.what){
                 case 0: //下拉刷新控件
 //                    articleListAdapter.notifyDataSetChanged();
-                    articleListAdapter_test.notifyDataSetChanged();
+                    articleListAdapter.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
                     scrollListener.setPreviousTotal(0);
+                    scrollListener.setLoading(false);
+                    articleListAdapter.setFootText(ArticleListAdapter.FOOT_LOADING);
                     break;
-                case 1://上拉底部加载更多
-//                    articleListAdapter.notifyDataSetChanged();
-                    articleListAdapter_test.notifyDataSetChanged();
+
             }
         }
     };
 
-//    @BindView(R.id.banner)
-//    Banner banner;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.ArticleList)
     RecyclerView ArticleList;
 
-    ArticleListAdapter articleListAdapter_test;
+    ArticleListAdapter articleListAdapter;
     ArticleScrollListener scrollListener;
+    ArticleLinearLayoutManager articleLinearLayoutManager;
+
+    private volatile boolean isLoadingMore = false;
 
     @Override
     public Context getContext() {
@@ -110,9 +114,10 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 
     private void initArticleList(){
-        articleListAdapter_test = new ArticleListAdapter(context);
-        ArticleList.setLayoutManager(new LinearLayoutManager(getContext()));
-        ArticleList.setAdapter(articleListAdapter_test);
+        articleListAdapter = new ArticleListAdapter(context);
+        articleLinearLayoutManager = new ArticleLinearLayoutManager(context);
+        ArticleList.setLayoutManager(articleLinearLayoutManager);
+        ArticleList.setAdapter(articleListAdapter);
         ArticleList.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -120,30 +125,24 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void initListener() {
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        articleListAdapter_test.setOnItemClickListener(new ArticleListAdapter.OnItemClickListener() {
+        articleListAdapter.setOnItemClickListener(new ArticleListAdapter.OnItemClickListener() {
             @Override
             public void onArticleItemClickListener(View view) {
                 Toast.makeText(context,"v.getId()"+view.getId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(),DetailActivity.class);
-                intent.putExtra("url", Constants.getInstance().getArticleList().get(view.getId()-1).getUrl());
-                intent.putExtra("article_detail_title",Constants.getInstance().getArticleList().get(view.getId()-1).getTitle());
+                intent.putExtra("url", Constants.getInstance().getArticleList().get(view.getId()).getUrl());
+                intent.putExtra("article_detail_title",Constants.getInstance().getArticleList().get(view.getId()).getTitle());
                 startActivity(intent);
             }
         });
         scrollListener = new ArticleScrollListener((LinearLayoutManager) ArticleList.getLayoutManager()) {
             @Override
             public void onLoadMore() {
-                for (int i=0;i<5;i++){
-                    Article article = new Article();
-                    article.setClassify("测试");
-                    article.setSummary("测试用案例");
-                    article.setTitle("测试用标题"+i);
-                    articleListAdapter_test.getArticleList().add(article);
-
+                if (!isLoadingMore){
+                    isLoadingMore = true;
+                    loadMoreData();
                 }
-                Message message = new Message();
-                message.what = 1;
-                handler.sendMessageDelayed(message,500);
+
             }
         };
 
@@ -151,46 +150,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private void loadMoreData(){
-        JSONObject object = new JSONObject();
-        try {
-            object.put("lastIndex",Networks.getInstance().lastIndex);
-            Networks.getInstance().doPost(Networks.basepath+"/article/getArticles",object).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Toast.makeText(getContext(),"数据加载失败！loadMoreData()",Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String str = response.body().string();
-                    List articleList = Constants.getInstance().getArticleList();
-                    Article article;
-                    JSONObject jsonObject;
-                    try {
-                        JSONArray jsonArray = new JSONArray(str);
-                        for (int i=0;i<jsonArray.length();i++){
-                            jsonObject = (JSONObject) jsonArray.get(i);
-                            article = new Article();
-                            article.setId(jsonObject.getInt("id"));
-                            article.setTitle(jsonObject.getString("title"));
-                            article.setClassify(jsonObject.getString("classify"));
-                            article.setSummary(jsonObject.getString("summary"));
-                            article.setUrl(jsonObject.getString("url"));
-                            articleList.add(article);
-                            Networks.getInstance().lastIndex++;
-                        }
-                        Message message = new Message();
-                        message.what = 1;
-                        handler.sendMessageDelayed(message,500);
-//                        handler.sendMessage(message);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        new LoadAsyncTask().execute();
     }
 
     @Override
@@ -211,7 +171,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Networks.getInstance().doPost(Networks.basepath+"/article/getAll").enqueue(new Callback() {
+                Networks.getInstance().doPost(Networks.basepath+"/article/getArticles",object).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Toast.makeText(getContext(),"获取数据失败！HomeFragment",Toast.LENGTH_SHORT).show();
@@ -223,7 +183,9 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         String str = response.body().string();
                         List articleList = Constants.getInstance().getArticleList();
                         articleList.clear();
-                        Article article;
+                        Article article = new Article();
+                        article.setType(Article.BANNER);
+                        articleList.add(article);
                         JSONObject jsonObject;
                         try {
                             JSONArray jsonArray = new JSONArray(str);
@@ -250,5 +212,77 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 //                handler.sendEmptyMessageAtTime(message.what,2000);
             }
         }).start();
+    }
+
+    class LoadAsyncTask extends AsyncTask<Integer,Void,List<Article>>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d("MainActivity","onPreExecute");
+            articleListAdapter.addFoot();
+
+        }
+
+        @Override
+        protected List<Article> doInBackground(Integer... params) {
+            Log.d("MainActivity","doInBackground");
+            JSONObject object = new JSONObject();
+            List<Article> articleList = null;
+            try {
+                object.put("lastIndex",Networks.getInstance().lastIndex);
+                Response response = Networks.getInstance().doPost(Networks.basepath+"/article/getArticles",object).execute();
+                if (response.code() == 200){
+                    articleList = new ArrayList<Article>();
+                    Article article;
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    JSONObject jsonObject;
+                    for (int i=0;i<jsonArray.length();i++){
+                        jsonObject = (JSONObject) jsonArray.get(i);
+                        article = new Article();
+                        article.setId(jsonObject.getInt("id"));
+                        article.setTitle(jsonObject.getString("title"));
+                        article.setClassify(jsonObject.getString("classify"));
+                        article.setSummary(jsonObject.getString("summary"));
+                        article.setUrl(jsonObject.getString("url"));
+                        article.setType(Article.ARTITLE);
+                        articleList.add(article);
+                        Networks.getInstance().lastIndex++;
+                    }
+                    Thread.sleep(1000);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return articleList;
+        }
+
+        @Override
+        protected void onPostExecute(List<Article> newArticles) {
+            Log.d("MainActivity","onPostExecute");
+            super.onPostExecute(newArticles);
+            if (newArticles == null){
+                Log.d("MainActivity","newArticles null");
+                articleListAdapter.setFootText(ArticleListAdapter.FOOT_ERROR);
+                scrollListener.setLoading(false);
+            }
+           else if (newArticles.size() == 0){
+                Log.d("MainActivity","newArticles size 0");
+                articleListAdapter.setFootText(ArticleListAdapter.FOOT_END);
+                scrollListener.setLoading(true);
+            }
+            else if (newArticles.size() > 0){
+                Log.d("MainActivity","newArticles size > 0");
+                articleListAdapter.removeFoot();
+                Constants.getInstance().getArticleList().addAll(newArticles);
+                articleListAdapter.notifyDataSetChanged();
+                scrollListener.setLoading(false);
+            }
+            isLoadingMore = false;
+        }
     }
 }

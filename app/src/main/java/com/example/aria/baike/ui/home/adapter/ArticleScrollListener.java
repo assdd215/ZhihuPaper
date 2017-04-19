@@ -29,7 +29,7 @@ public abstract class ArticleScrollListener extends RecyclerView.OnScrollListene
     private int firstVisibleItem;
 
     //是否正在上拉数据
-    private boolean loading = true;
+    private boolean loading = false;
 
 
     public ArticleScrollListener(LinearLayoutManager linearLayoutManager){
@@ -39,23 +39,10 @@ public abstract class ArticleScrollListener extends RecyclerView.OnScrollListene
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        if (preX < 0 && preY < 0){
-            preX = dx;
-            preY = dy;
-        }
-        Log.d("MainActivity","scrolled  dx:"+dx+", dy:"+dy);
+
         visibleItemCount = recyclerView.getChildCount();
         totalItemCount = linearLayoutManager.getItemCount();
         firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-        if (loading){
-            Log.d("MainActivity","visibleItemCount:"+visibleItemCount);
-            Log.d("MainActivity","totalItemCount:"+totalItemCount);
-            Log.d("MainActivity","firstVisibleItem:"+firstVisibleItem);
-            if (totalItemCount > previousTotal){
-                loading = false;
-                previousTotal = totalItemCount;
-            }
-        }
 
         if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem ){
             Log.d("MainActivity","loadMore");
@@ -71,10 +58,6 @@ public abstract class ArticleScrollListener extends RecyclerView.OnScrollListene
     public void setLoading(boolean loading) {
         this.loading = loading;
     }
-
-//    public boolean Loadable(int dx,int dy){
-////        if (Math.abs(dx -preX) <= Math.abs(dy) )
-//    }
 
     public abstract void onLoadMore();
 }

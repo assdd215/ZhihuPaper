@@ -5,12 +5,18 @@ package com.example.aria.baike.model;
  */
 
 public class Article {
+
+    public static final int BANNER = 0x120;
+    public static final int ARTITLE = 0x121;
+    public static final int FOOT = 0x122;
+
     private int id;
     private String title;
     private String classify;
     private String summary;
     private String url;
     private String avactor;
+    private int type;
 
     public Article(){}
 
@@ -60,5 +66,13 @@ public class Article {
 
     public String getUrl() {
         return url;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 }

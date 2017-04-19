@@ -34,7 +34,7 @@
 
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/space_50"
         android:id="@+id/navigation_bottom_bar"
         android:layout_alignParentBottom="true"
         app:bnbActiveColor="@color/colorLightBlue"/>
