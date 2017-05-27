@@ -41,4 +41,5 @@
 
     <color name="colorAccountGray">#979ba3</color>
     <color name="colorCommonBgGray">#ebf0f2</color>
+    <color name="colorTransParent">#00000000</color>
 </resources>

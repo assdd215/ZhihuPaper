@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aria.baike.R;
+import com.example.aria.baike.util.CommonUtil;
 
 import java.util.List;
 
@@ -52,6 +54,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<drawerViewHolder>{
                 onItemClickListener.onItemClick(v);
             }
         });
+
+        holder.item_theme.setTextColor(CommonUtil.getAttrColor(R.attr.colorDrawerMenuText,context));
+        holder.drawer_layout.setBackgroundColor(CommonUtil.getAttrColor(R.attr.colorDrawerMenu,context));
     }
 
     @Override
@@ -79,11 +84,13 @@ class drawerViewHolder extends RecyclerView.ViewHolder{
     TextView item_theme;
     ImageView image_follow;
     View itemView;
+    LinearLayout drawer_layout;
 
     public drawerViewHolder(View itemView) {
         super(itemView);
         this.itemView = itemView;
         item_theme = (TextView) itemView.findViewById(R.id.item_theme);
         image_follow = (ImageView) itemView.findViewById(R.id.follow_iv);
+        drawer_layout = (LinearLayout) itemView.findViewById(R.id.item_layout);
     }
 }

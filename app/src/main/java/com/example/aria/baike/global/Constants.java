@@ -1,6 +1,7 @@
 package com.example.aria.baike.global;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.example.aria.baike.model.Article;
@@ -15,6 +16,7 @@ public  class Constants {
     public static final int LOCATIONATY_RESPONSE = 0;
     public static final int LOGINATY_RESPONSE = 1;
     public static final int LOGINATY_REQUEST = 2;
+    public static final String LAUNCH_BY_NOTIFICATION = "LAUNCH_BY_NOTIFICATION";
 
     private List<Article> articleList;
 

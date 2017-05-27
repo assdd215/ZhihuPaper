@@ -1,9 +1,12 @@
 package com.example.aria.baike.ui.home.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +17,7 @@ import com.example.aria.baike.R;
 import com.example.aria.baike.global.Constants;
 import com.example.aria.baike.loader.GlideImageLoader;
 import com.example.aria.baike.model.Article;
+import com.example.aria.baike.util.CommonUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -121,6 +125,10 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
                     popupMenu.show();
                 }
             });
+
+            articleViewHolder.layoutBackground.setBackgroundColor(CommonUtil.getAttrColor(R.attr.colorCardViewBackground,context));
+            articleViewHolder.summary.setTextColor(CommonUtil.getAttrColor(R.attr.colorCardViewContentColor,context));
+            articleViewHolder.title.setTextColor(CommonUtil.getAttrColor(R.attr.colorCardViewTitleColor,context));
         }
         if (holder instanceof BannerViewHolder){
             BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
@@ -174,6 +182,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter{
     }
 
     public void setFootText(String text){
+        if (footText == null)return;
         footText.setText(text);
     }
 

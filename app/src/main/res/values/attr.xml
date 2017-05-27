@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorDrawerMenu" format="color|reference"/>
+    <attr name="colorDrawerMenuText" format="color|reference"/>
+    <attr name="colorCardViewBackground" format="color|reference"/>
+    <attr name="colorCardViewTitleColor" format="color|reference"/>
+    <attr name="colorCardViewContentColor" format="color|reference"/>
+    <attr name="colorWindowBackground" format="color|reference"/>
+    <attr name="toolbarColor" format="color|reference"/>
+    <attr name="colorNavigationBottomBarBackground" format="color|reference"/>
+    <attr name="colorNavigationBottomBarActiveColor" format="color|reference"/>
+</resources>

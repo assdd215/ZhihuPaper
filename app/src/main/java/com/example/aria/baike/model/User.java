@@ -17,6 +17,14 @@ public class User {
         this.password = password;
     }
 
+    public User(String account,String password,int id,String username,String avactor){
+        this.account = account;
+        this.password = password;
+        this.id = id;
+        this.username = username;
+        this.avactor = avactor;
+    }
+
     public User(){}
 
     public void setUsername(String username) {

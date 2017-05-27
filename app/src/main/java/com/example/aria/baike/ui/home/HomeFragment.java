@@ -285,4 +285,8 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             isLoadingMore = false;
         }
     }
+
+    public void refreshUI(){
+        articleListAdapter.notifyDataSetChanged();
+    }
 }

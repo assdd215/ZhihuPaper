@@ -1,18 +1,23 @@
 package com.example.aria.baike.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,17 +33,17 @@ import com.example.aria.baike.TestActivity;
 import com.example.aria.baike.common.BaseActivity;
 import com.example.aria.baike.global.Constants;
 import com.example.aria.baike.model.Article;
+import com.example.aria.baike.model.User;
+import com.example.aria.baike.global.UserMessage;
 import com.example.aria.baike.ui.classify.ClassifyFragment;
+import com.example.aria.baike.ui.detail.DetailActivity;
 import com.example.aria.baike.ui.home.HomeFragment;
 import com.example.aria.baike.ui.login.LoginActivity;
 import com.example.aria.baike.ui.main.adapter.DrawerAdapter;
 import com.example.aria.baike.ui.map.LocationActivity;
 import com.example.aria.baike.ui.person.PersonFragment;
-import com.example.aria.baike.ui.search.SearchActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.aria.baike.util.CommonUtil;
+import com.example.aria.baike.util.StatusBarCompat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +57,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private int LastNavigationSelectedPosition = 0;
     private List<Article> articleList;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     public final static String HOMEFRAGMENT_ID = "FRAGMENT_TAG1";
     public final static String PERSONFRAGMENT_ID = "FRAGMENT_TAG2";
@@ -75,6 +82,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     TextView user_name;
     @BindView(R.id.layout_user_message)
     LinearLayout layout_user_message;
+    @BindView(R.id.drawerHeaderLayout)
+    LinearLayout drawerHeaderLayout;
 
     private HomeFragment homeFragment;
     private PersonFragment personFragment;
@@ -82,6 +91,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private List<String> drawerList;
     private DrawerAdapter drawerAdapter;
+
+    private boolean isDayTheme = true;
 
 
     @Override
@@ -92,18 +103,40 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        if (getIntent().getBundleExtra(Constants.LAUNCH_BY_NOTIFICATION)!=null){
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            Bundle bundle = getIntent().getBundleExtra(Constants.LAUNCH_BY_NOTIFICATION);
+            String url = bundle.getString("url");
+            String article_detail_title = bundle.getString("article_detail_title");
+            intent.putExtra("url",url);
+            intent.putExtra("article_detail_title",article_detail_title);
+            startActivity(intent);
+        }
+    }
+
+    @Override
     public void initData() {
+
+        //初始化用户信息
+        sharedPreferences = getApplicationContext().getSharedPreferences("user",Context.MODE_PRIVATE);
+        User user = new User(sharedPreferences.getString("account",null),sharedPreferences.getString("password",null),
+                sharedPreferences.getInt("id",-1),sharedPreferences.getString("username",null),sharedPreferences.getString("avactor",null));
+        UserMessage.getInstance().setUser(user);
+
+        UserMessage userMessage = UserMessage.getInstance();
 
         if (getFragmentManager().findFragmentByTag(HOMEFRAGMENT_ID)==null){
             homeFragment = new HomeFragment();
             current_id = homeFragment;
         }
+
         if (getFragmentManager().findFragmentByTag(PERSONFRAGMENT_ID)==null){
             personFragment = PersonFragment.newInstance(this);
+
         }
-
-//        homeFragment = new HomeFragment();
-
 
         classifyFragment = ClassifyFragment.newInstance();
     }
@@ -126,6 +159,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         drawerContainer.setAdapter(drawerAdapter);
         drawerContainer.setLayoutManager(new LinearLayoutManager(this));
 
+        //设置头像信息
 
     }
 
@@ -133,7 +167,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
         toolbar.inflateMenu(R.menu.home_menu);
         toolbar.setNavigationIcon(R.drawable.ic_actionbar_menu);
-
+        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_actionbar_menu_overflow));
     }
 
     private void initNavigationBottomBar(){
@@ -152,7 +186,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         transaction.add(R.id.Container,personFragment,PERSONFRAGMENT_ID).hide(personFragment)
                     .add(R.id.Container,classifyFragment).hide(classifyFragment)
                     .add(R.id.Container,homeFragment,HOMEFRAGMENT_ID).show(homeFragment);
-
         transaction.commit();
     }
 
@@ -171,9 +204,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.action_home:
-                        Toast.makeText(getActivity(),"home",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, TestActivity.class));
+                    case R.id.menu_theme:
+                        if (isDayTheme)setTheme(R.style.NightTheme);
+                        else setTheme(R.style.DayTheme);
+                        isDayTheme = !isDayTheme;
+                        refreshUI();
                         break;
                 }
                 return true;
@@ -216,9 +251,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         FragmentTransaction transaction = manager.beginTransaction();
         switch (position){
             case 0:
-                toolbar.getMenu().getItem(0).setVisible(false);
-                toolbar.getMenu().getItem(1).setVisible(false);
-                toolbar.getMenu().getItem(2).setVisible(false);
                 ((TextView)toolbar.findViewById(R.id.toolbar_title)).setText("主页");
                 if (current_id != homeFragment){
                     if (homeFragment == null){
@@ -242,9 +274,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 toolbar.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                toolbar.getMenu().getItem(0).setVisible(false);
-                toolbar.getMenu().getItem(1).setVisible(false);
-                toolbar.getMenu().getItem(2).setVisible(false);
                 ((TextView)toolbar.findViewById(R.id.toolbar_title)).setText("个人中心");
 //                transaction.replace(R.id.Container,personFragment);
                 if (current_id != personFragment){
@@ -272,6 +301,27 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (UserMessage.getInstance().getUserName() != null){
+            Log.d("MainActivity","MainActivity userName :" + UserMessage.getInstance().getUserName());
+            if (UserMessage.getInstance().getUserName().equals(""))
+                user_name.setText("你的昵称");
+            else user_name.setText(UserMessage.getInstance().getUserName());
+        }else {
+            Log.d("MainActivity","MainActivity userName null account null" );
+            user_name.setText("请登录");
+        }
+        if (UserMessage.getInstance().getAccount()!=null){
+            decodeBitmap(UserMessage.getInstance().getAccount());
+        }else {
+            Log.d("MainActivity","UserMessage.getInstance().getAccount()=null");
+            user_icon.setImageResource(R.drawable.comment_avatar);
+        }
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
@@ -280,22 +330,41 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 current_id = homeFragment;
                 break;
             case Constants.LOGINATY_RESPONSE:
-                if (Constants.getInstance().isLogin == false){
-                    return;
-                }
-                Log.d("MainActivity","onActivityResult"+Constants.LOGINATY_RESPONSE);
-                personFragment.setUseranme(data.getStringExtra("username"));
-                personFragment.setAccount(data.getStringExtra("account"));
-                personFragment.setAvactor(data.getStringExtra("account"));
-
-                user_name.setText(data.getStringExtra("username"));
-                File file = new File(Constants.PATH+"/"+data.getStringExtra("account")+"/avactor.png");
-                if (file.exists()){
-                    Bitmap bitmap = BitmapFactory.decodeFile(Constants.PATH+"/"+data.getStringExtra("account")+"/avactor.png");
-                    user_icon.setImageBitmap(bitmap);
-                }else {
-                    Toast.makeText(getActivity(),"查无头像图片",Toast.LENGTH_SHORT).show();
-                }
+                User user = new User(data.getStringExtra("account"),data.getStringExtra("password"),data.getIntExtra("id",0),data.getStringExtra("username"),data.getStringExtra("avactor"));
+                UserMessage.getInstance().setUser(user);
+                editor = sharedPreferences.edit();
+                editor.putString("username",user.getUsername());
+                editor.putString("password",user.getPassword());
+                editor.putString("account",user.getAccount());
+                editor.putInt("id",user.getId());
+                editor.putString("avactor",user.getAccount());
+                editor.apply();
+                break;
         }
+    }
+
+    private void decodeBitmap(String account){
+        File file = new File(Constants.PATH+"/"+account+"/avactor.png");
+        if (file.exists()){
+            Log.d("MainActivity","file exists"+file.getPath());
+            Bitmap bitmap = BitmapFactory.decodeFile(Constants.PATH+"/"+account+"/avactor.png");
+            user_icon.setImageBitmap(bitmap);
+        }else {
+            Log.d("MainActivity","file not exists");
+            user_icon.setImageResource(R.drawable.comment_avatar);
+        }
+    }
+
+    private void refreshUI(){
+        toolbar.setBackgroundColor(CommonUtil.getAttrColor(R.attr.toolbarColor,this));
+
+//        navigationBar.setBarBackgroundColor(CommonUtil.getAttrColor(R.attr.colorNavigationBottomBarBackground,this));
+//        navigationBar.setActiveColor(CommonUtil.getAttrColor(R.attr.colorNavigationBottomBarActiveColor,this));
+
+        drawerLayout.setBackgroundColor(CommonUtil.getAttrColor(R.attr.colorWindowBackground,this));
+        drawerAdapter.notifyItemRangeChanged(0,drawerAdapter.getItemCount());
+        drawerHeaderLayout.setBackgroundColor(CommonUtil.getAttrColor(R.attr.colorPrimaryDark,this));
+        StatusBarCompat.compat(this,CommonUtil.getAttrColor(R.attr.colorAccent,this));
+        homeFragment.refreshUI();
     }
 }

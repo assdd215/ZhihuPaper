@@ -8,14 +8,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.aria.baike.ui.main.MainActivity"
-    android:background="@color/colorLightBlue"
+    android:background="?attr/colorPrimary"
     >
 
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/drawerLayout"
-        android:background="@color/colorCommonBgGray">
+        android:background="?attr/colorWindowBackground">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +37,8 @@
         android:layout_height="@dimen/space_50"
         android:id="@+id/navigation_bottom_bar"
         android:layout_alignParentBottom="true"
-        app:bnbActiveColor="@color/colorLightBlue"/>
+        app:bnbBackgroundColor="?attr/colorNavigationBottomBarBackground"
+        app:bnbActiveColor="?attr/colorNavigationBottomBarActiveColor"/>
 
 
 

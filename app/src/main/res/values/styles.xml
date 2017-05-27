@@ -8,4 +8,36 @@
         <item name="colorAccent">#0099FF</item>
     </style>
 
+    <style name="DayTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorDayPrimary</item>
+        <item name="colorPrimaryDark">@color/colorDayPrimaryDark</item>
+        <item name="colorAccent">@color/colorDayAccent</item>
+        <item name="colorDrawerMenu">@color/colorWhite</item>
+        <item name="colorDrawerMenuText">@color/colorBlack</item>
+        <item name="colorCardViewBackground">@color/colorDayCardView</item>
+        <item name="colorCardViewContentColor">@color/colorDarkGray</item>
+        <item name="colorCardViewTitleColor">@color/colorBlack</item>
+        <item name="colorWindowBackground">@color/colorDayWindowBackground</item>
+        <item name="toolbarColor">@color/colorDayPrimary</item>
+        <item name="colorNavigationBottomBarBackground">@color/colorWhite</item>
+        <item name="colorNavigationBottomBarActiveColor">@color/colorLightBlue</item>
+    </style>
+
+    <style name="NightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorNightPrimary</item>
+        <item name="colorPrimaryDark">@color/colorNightPrimaryDark</item>
+        <item name="colorAccent">@color/colorNightAccent</item>
+        <item name="colorDrawerMenu">@color/colorNightPrimary</item>
+        <item name="colorDrawerMenuText">@color/colorWhite</item>
+        <item name="colorCardViewBackground">@color/colorNightCardView</item>
+        <item name="colorCardViewContentColor">@color/colorWhite</item>
+        <item name="colorCardViewTitleColor">@color/colorWhite</item>
+        <item name="colorWindowBackground">@color/colorNightWindowBackground</item>
+        <item name="toolbarColor">@color/colorNightPrimary</item>
+        <item name="colorNavigationBottomBarBackground">@color/colorNightPrimary</item>
+        <item name="colorNavigationBottomBarActiveColor">@color/colorDarkGray</item>
+    </style>
+
 </resources>

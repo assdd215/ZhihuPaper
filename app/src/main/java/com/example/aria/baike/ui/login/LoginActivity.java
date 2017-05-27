@@ -112,10 +112,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         String str = response.body().string();
                         final String message;
                         JSONObject object;
+                        final int id;
                         Log.d("MainActivity","str:"+str);
                         try {
                             object = new JSONObject(str);
-                            Integer id = object.getInt("id");
+                            id = object.getInt("id");
                             switch (id){
                                 case -1:
                                     message = "账号不存在！！";
@@ -135,6 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                                     user.setAvactor(object.getString("avactor"));
                                     message = "登陆成功！！";
                                     Log.d("MainActivity","登陆成功！");
+                                    Log.d("MainActivity","account:"+user.getAccount()+" id:"+user.getId()+" password:"+user.getPassword()+" username:"+user.getUsername()+" avactor:"+user.getAvactor());
                                     getAvactor(user.getAccount());
                                     break;
                                 }
@@ -143,14 +145,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                                 public void run() {
                                     progressDialog.cancel();
                                     Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent();
-                                    intent.putExtra("account",user.getAccount());
-                                    intent.putExtra("password",user.getPassword());
-                                    intent.putExtra("username",user.getUsername());
-                                    intent.putExtra("id",user.getId());
-                                    intent.putExtra("avactor",user.getAvactor());
-                                    getActivity().setResult(Constants.LOGINATY_RESPONSE,intent);
-                                    getActivity().finish();
+                                    if (id > 0){
+                                        Intent intent = new Intent();
+                                        intent.putExtra("account",user.getAccount());
+                                        intent.putExtra("password",user.getPassword());
+                                        intent.putExtra("username",user.getUsername());
+                                        intent.putExtra("id",user.getId());
+                                        intent.putExtra("avactor",user.getAvactor());
+                                        setResult(Constants.LOGINATY_RESPONSE,intent);
+                                        finish();
+                                    }
                                 }
                             });
                         } catch (JSONException e) {
@@ -181,7 +185,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 FileOutputStream fileOutputStream = null;
                 File file = new File(Constants.PATH+"/"+account);
                 if (!file.exists()){
-                    file.mkdirs();
+                    file.mkdirs ();
                 }
 
                 try {
@@ -193,6 +197,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+
+
             }
         });
 

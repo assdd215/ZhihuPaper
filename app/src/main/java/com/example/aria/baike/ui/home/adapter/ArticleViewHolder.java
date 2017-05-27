@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aria.baike.R;
@@ -22,6 +23,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
     TextView title;
     TextView summary;
     ImageView topicBtn;
+    LinearLayout layoutBackground;
 
     public ArticleViewHolder(View itemView){
         super(itemView);
@@ -30,5 +32,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
         topicBtn = (ImageView) itemView.findViewById(R.id.topic_image);
         topicAvactor = (CircleImageView) itemView.findViewById(R.id.topic_avactor);
         from = (TextView) itemView.findViewById(R.id.topic_from_textview);
+        layoutBackground = (LinearLayout) itemView.findViewById(R.id.layoutBackground);
     }
 }

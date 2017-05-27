@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.aria.baike.R;
 import com.example.aria.baike.common.BaseFragment;
 import com.example.aria.baike.global.Constants;
+import com.example.aria.baike.global.UserMessage;
 import com.example.aria.baike.ui.person.adapter.DividerGridItemDecoration;
 import com.example.aria.baike.ui.person.adapter.FeaturesGridAdapter;
 import com.example.aria.baike.ui.person.adapter.PersonMenuAdapter;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
 
 public class PersonFragment extends BaseFragment{
 
-    private FeaturesGridAdapter gridAdapter;
+
     private PersonMenuAdapter personMenuAdapter;
     private OnItemClickListener onItemClickListener;
 
@@ -78,7 +79,6 @@ public class PersonFragment extends BaseFragment{
         images.add(R.drawable.tubiao07);
 
         personMenuAdapter = new PersonMenuAdapter(context,titles,images);
-        gridAdapter = new FeaturesGridAdapter(context,titles,images);
     }
 
     @Override
@@ -118,10 +118,18 @@ public class PersonFragment extends BaseFragment{
     }
 
     public void setUseranme(String username){
-        header_username.setText(username);
+        if (username == null){
+            header_username.setText("");
+        }else
+          header_username.setText(username);
     }
 
+
     public void setAccount(String account){
+        Log.d("MainActivity","setAccount"+account);
+        if (account == null){
+            header_account.setText("账号：");
+        }else
         header_account.setText("账号:"+account);
     }
 
@@ -131,9 +139,34 @@ public class PersonFragment extends BaseFragment{
             Bitmap bitmap = BitmapFactory.decodeFile(Constants.PATH+"/"+account+"/avactor.png");
             person_avactor.setImageBitmap(bitmap);
         }else {
-            Toast.makeText(getActivity(),"查无头像图片",Toast.LENGTH_SHORT).show();
+            person_avactor.setImageResource(R.drawable.comment_avatar);
         }
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserMessage.getInstance().getAccount()!=null){
+            Log.d("MainActivity","personFragment account :" + UserMessage.getInstance().getAccount());
+            header_account.setText("账号：" + UserMessage.getInstance().getAccount());
+            setAvactor(UserMessage.getInstance().getAccount());
+        }else {
+            Log.d("MainActivity","personFragment account null");
+            header_account.setText("账号：");
+            setAvactor(null);
+        }
+        if (UserMessage.getInstance().getUserName()!=null){
+            Log.d("MainActivity",UserMessage.getInstance().getUserName().equals("null")+"");
+            Log.d("MainActivity","personFragment not null userName :" + UserMessage.getInstance().getUserName());
+            if (UserMessage.getInstance().getUserName().equals("")){
+                header_username.setText("你的昵称");
+            }else
+            header_username.setText(UserMessage.getInstance().getUserName());
+        }else {
+            Log.d("MainActivity","personFragment userName null Account null");
+            header_account.setText("请登录");
+        }
     }
 }

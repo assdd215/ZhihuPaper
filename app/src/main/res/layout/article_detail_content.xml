@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/WebContent"/>
+    </android.support.v4.widget.NestedScrollView>
 
-</android.support.v4.widget.NestedScrollView>
+<!--<LinearLayout-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="35dp"-->
+<!--android:background="@color/colorWhite"-->
+<!--android:padding="@dimen/space_5"-->
+<!--android:orientation="horizontal"-->
+<!--android:layout_alignParentBottom="true"-->
+<!--android:layout_alignParentLeft="true"-->
+<!--android:layout_alignParentStart="true">-->
+<!--<ImageView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="3"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/edit_comment_btn"-->
+    <!--android:background="@color/colorTransParent"-->
+    <!--android:scaleType="fitCenter"/>-->
+<!--<ImageView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:src="@drawable/ic_comment_black_48dp"-->
+    <!--android:background="@color/colorTransParent"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--android:padding="@dimen/space_2"/>-->
+<!--<ImageView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:src="@drawable/iconmonstr_favorite_2_240"-->
+    <!--android:background="@color/colorTransParent"-->
+    <!--android:scaleType="centerInside"-->
+    <!--android:padding="@dimen/space_3"/>-->
+<!--<ImageView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:src="@drawable/iconmonstr_share_1_240"-->
+    <!--android:padding="@dimen/space_5"-->
+    <!--android:scaleType="centerInside"/>-->
+
+
+<!--</LinearLayout>-->
+
+
+

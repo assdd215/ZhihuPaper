@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -45,6 +46,8 @@ public class DetailActivity extends BaseActivity{
     public void initData() {
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("article_detail_title");
+        Log.d("MainActivity","url:"+url);
+        Log.d("MainActivity","title:"+title);
     }
 
     @Override

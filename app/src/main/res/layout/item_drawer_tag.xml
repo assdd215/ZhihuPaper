@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -8,7 +9,8 @@
     android:paddingLeft="@dimen/space_20"
     android:paddingBottom="@dimen/space_10"
     android:gravity="center_vertical"
-    android:background="@color/colorWhite"
+    android:id="@+id/item_layout"
+    android:background="?attr/colorDrawerMenu"
     android:descendantFocusability="afterDescendants">
 
     <TextView
@@ -17,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="@dimen/textSize_16"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorDrawerMenuText"
         tools:text="日常心里学" />
 
     <ImageView

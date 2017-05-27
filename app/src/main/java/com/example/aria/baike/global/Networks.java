@@ -24,7 +24,7 @@ public class Networks {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
-    public static final String basepath = "http://192.168.1.104:8080";
+    public static final String basepath = "http://120.24.211.43:8080/baike";
 
     private static final int READ_TIMEOUT = 1;
     private static final int WRITE_TIMEOUT = 1;

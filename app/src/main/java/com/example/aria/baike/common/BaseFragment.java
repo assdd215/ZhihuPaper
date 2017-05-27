@@ -1,10 +1,14 @@
 package com.example.aria.baike.common;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +60,13 @@ public class BaseFragment extends Fragment {
     @Override
     public Context getContext() {
         return context;
+    }
+
+    protected int getAttrColor(int resourceId){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getActivity().getTheme();
+        theme.resolveAttribute(resourceId,typedValue,true);
+        return ContextCompat.getColor(context,typedValue.resourceId);
     }
 }
 

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/colorLightBlue"
-    android:id="@+id/toolbar">
+    android:background="?attr/toolbarColor"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:id="@+id/toolbar"
+    android:fitsSystemWindows="true"
+    android:elevation="@dimen/space_3">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,6 +16,5 @@
         android:text="首页"
         android:layout_gravity="center"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/textSize_20"
-        />
+        android:textSize="@dimen/textSize_20" />
 </android.support.v7.widget.Toolbar>

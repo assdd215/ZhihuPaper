@@ -113,6 +113,10 @@ public class SplashActivity extends BaseActivity{
 
                         Intent intent = new Intent();
                         intent.putExtra("articleList",str);
+                        if (getIntent().getBundleExtra(Constants.LAUNCH_BY_NOTIFICATION)!=null){
+                            intent.putExtra(Constants.LAUNCH_BY_NOTIFICATION,getIntent().
+                                    getBundleExtra(Constants.LAUNCH_BY_NOTIFICATION));
+                        }
                         startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         finish();
                     }
